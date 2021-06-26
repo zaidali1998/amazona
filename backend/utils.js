@@ -17,7 +17,7 @@ export const generateToken = (user) => {
 export const isAuth = (req, res, next) => {
     const authorization = req.headers.authorization;
     if(authorization) {
-        const token = authorization.silce(7, authorization.length);   // bearer xxxxxxx
+        const token = authorization.slice(7, authorization.length);   // bearer xxxxxxx
         jwt.verify(
             token, 
             process.env.JWT_SECRET || 'somethingSecret',
@@ -33,5 +33,14 @@ export const isAuth = (req, res, next) => {
         )
     } else {
         res.status(401).send( {message: 'No Token'});
+    }
+};
+
+export const isAdmin = (req, res, next) => {
+    if(req.user && req.user.isAdmin) {
+        next();
+    }
+    else{
+        res.status(401).send( {message: 'Invalid Admin Token'});
     }
 }
