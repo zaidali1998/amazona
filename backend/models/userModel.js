@@ -4,6 +4,7 @@ const userSchema = new mongoos.Schema({
     email: { type: String, required: true, unique: true},
     password: { type: String, required: true, unique: true},
     isAdmin: { type: Boolean, required: true, default: false},
+    isSeller: { type: Boolean, required: true, default: false}
 },
 {
     timestamps: true,
