@@ -6,6 +6,7 @@ import MessageBox from '../components/MessageBox';
 import { PRODUCT_CREATE_RESET, PRODUCT_DELETE_RESET } from '../constants/productConstants';
 
 export default function ProductListScreen(props) {
+    const sellerMode = props.match.path.indexOf('/seller') >= 0;
     const productList = useSelector(state => state.productList);
     const { loading, error, products } = productList;
 
@@ -20,17 +21,19 @@ export default function ProductListScreen(props) {
     const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete;
 
     const dispatch = useDispatch();
+    const userSignin = useSelector((state) => state.userSignin);
+    const { userInfo } = userSignin;
     
     useEffect(()=>{
         if(successCreate) {
             dispatch({type: PRODUCT_CREATE_RESET });
             props.history.push(`/product/${createdProduct._id}/edit`)
         }
-        dispatch(listProducts());
+        dispatch(listProducts({ seller: sellerMode ? userInfo._id : ''}));
         if(successDelete){
             dispatch({type: PRODUCT_DELETE_RESET});
         }
-    }, [dispatch, createdProduct, props.history, successCreate, successDelete]);
+    }, [dispatch, createdProduct, props.history, successCreate, successDelete, sellerMode, userInfo._id]);
 
     const deleteHandler = (product) =>{
         if( window.confirm('Are you sure to delete')){
