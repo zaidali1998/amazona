@@ -28,6 +28,7 @@ import { listProductCategories } from './actions/productActions';
 import LoadingBox from './components/LoadingBox';
 import MessageBox from './components/MessageBox';
 import MapScreen from './screens/MapScreen';
+import DashboardScreen from './screens/DashboardScreen';
 
 function App() {
 
@@ -162,21 +163,26 @@ useEffect(()=>{
       <Route path="/search/name/:name?" component={SearchScreen} exact></Route>
       <Route path="/search/category/:category" component={SearchScreen} exact></Route>
       <Route path="/search/category/:category/name/:name" component={SearchScreen} exact></Route>
-      <Route path="/search/category/:category/name/:name/min/:min/max/:max/rating/:rating/order/:order" component={SearchScreen} exact></Route>
+      <Route path="/search/category/:category/name/:name/min/:min/max/:max/rating/:rating/order/:order/pageNumber/:pageNumber" component={SearchScreen} exact></Route>
       
 
       <PrivateRoute path="/profile" component={ProfileScreen}></PrivateRoute>
       <PrivateRoute path="/map" component={MapScreen}></PrivateRoute>
       
       <AdminRoute path="/productlist" component={ProductListScreen} exact></AdminRoute>
+      <AdminRoute path="/productlist/pageNumber/:pageNumber" component={ProductListScreen} exact></AdminRoute>
       <AdminRoute path="/orderlist" component={OrderListScreen} exact ></AdminRoute>
+      <AdminRoute path="/orderlist/pageNumber/:pageNumber" component={OrderListScreen} exact ></AdminRoute>
       <AdminRoute path="/userlist" component={UserListScreen}></AdminRoute>
       <AdminRoute path="/user/:id/edit" component={UserEditScreen}></AdminRoute>
+      <AdminRoute path="/dashboard" component={DashboardScreen}></AdminRoute>
       
       <SellerRoute path="/productlist/seller" component={ProductListScreen}></SellerRoute>
       <SellerRoute path="/orderlist/seller" component={OrderListScreen}></SellerRoute>
       
       <Route path="/" component={HomeScreen} exact></Route>
+      <Route path="/pageNumber/:pageNumber/" component={HomeScreen} exact></Route>
+
     </main>
     <footer className="row center">
         All right reserved

@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import {Link, useParams } from 'react-router-dom';
 import { deleteOrder, listOrders } from '../actions/orderActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { ORDER_DELETE_RESET } from '../constants/orderConstants';
 
 export default function OrderListScreen(props) {
+  const {  pageNumber = 1 } =useParams();
   const sellerMode = props.match.path.indexOf('/seller') >= 0;
     
     const orderList = useSelector((state) => state.orderList);
-    const { loading, error, orders} = orderList;
+    const { loading, error, orders,  pages, page} = orderList;
 
     const orderDelete = useSelector((state) => state.orderDelete);
     const { loading: loadingDelete, error: errorDelete, success: successDelete} = orderDelete;
@@ -20,8 +22,8 @@ export default function OrderListScreen(props) {
     const dispatch = useDispatch();
     useEffect(() => {
       dispatch({type: ORDER_DELETE_RESET});
-      dispatch(listOrders({ seller: sellerMode ? userInfo._id : '' }));
-    }, [dispatch, sellerMode, userInfo._id, successDelete]);
+      dispatch(listOrders({ seller: sellerMode ? userInfo._id : '' ,pageNumber}));
+    }, [dispatch, sellerMode, userInfo._id, successDelete, pageNumber]);
     const deleteHandler = (order) => {
       if( window.confirm('Are you sure to delete')){
         dispatch(deleteOrder(order._id));
@@ -38,6 +40,7 @@ export default function OrderListScreen(props) {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
+        <>
         <table className="table">
           <thead>
             <tr>
@@ -81,6 +84,14 @@ export default function OrderListScreen(props) {
             ))}
           </tbody>
         </table>
+        <div className="row center pagination">
+            {[ ...Array(pages).keys()].map((x)=> (
+                <Link className={x +1 ===page ? 'active' : ''} key={x+1} to={`/orderlist/pageNumber/${x+1}`}>
+                    { x+1 } 
+                </Link>
+            ))}
+        </div>
+        </>
       )}
     </div>
         </div>
